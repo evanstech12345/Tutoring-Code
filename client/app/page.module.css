@@ -1,23 +1,48 @@
 
 
 .main {
-
-  margin: 0;
+  height: 100vh;
   overflow-x: hidden;
   font-family: Inter, Space Grotesk;
-
+  text-align: center;
  
 
 }
 
 .title_home{
-  color: black;
-  text-align: center;
+  position: relative;
+  margin-top: 2em;
+  color: #008CFF;
+
+
   font-size: 2em;
 }
 
-.nav {
+.subheading_title{
+  position: relative;
+  top: 3em;
 
+  font-size: 1rem;
+}
+
+.getquotehomebtn {
+  position: relative;
+  top: 5em;
+  background: hsla(207, 100%, 50%, 1);
+  padding: 15px;
+  background: linear-gradient(90deg, hsla(207, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+
+  /* background: -moz-linear-gradient(90deg, hsla(207, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%); */
+
+  /* background: -webkit-linear-gradient(90deg, hsla(207, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%); */
+
+  /* filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#008CFF", endColorstr="#60efff", GradientType=1 );   */
+  border-color: white;
+
+}
+
+.nav {
+  justify-content: center;
   position: relative;
   background-color: #D9D9D9;
   font-size: 1.5rem;
@@ -26,10 +51,14 @@
 
 .navtext {
 
+  padding: 40px;
   color: black !important;
 }
 
-
+.logodiv{
+  position: relative;
+/*!make this start at the beginning of the page*/
+}
 
 .logo{
   

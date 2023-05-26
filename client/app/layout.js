@@ -1,12 +1,11 @@
 "use client" //!put this on the top of your app for bootstrap to work
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import Container from 'react-bootstrap/Container';
+// import dynamic from 'next/dynamic';
 import Nav from "react-bootstrap/Nav";
-import Navbar from 'react-bootstrap/Navbar';
 import Image from "react-bootstrap/Image";
 import styles from "./page.module.css";
 import Link from "next/link";
+import { Container } from "react-bootstrap";
 
 
 
@@ -21,21 +20,24 @@ export default function Layout({
   return (
     <section className={styles.main}>
       {/* Include shared UI here e.g. a header or sidebar */}
-      <Navbar className={styles.nav}>
-      <Container>
-        <Navbar.Brand href="#home"><Image src="Logo.png" className={styles.logo} /></Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/about" className={styles.navtext}>About</Nav.Link>
-            <Nav.Link href="#link" className={styles.navtext}>Catalog</Nav.Link>
-            <Nav.Link href="#link" className={styles.navtext}>Why Code?</Nav.Link>
-
-
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      <Nav
+        activeKey="/home"
+        onSelect={(selectedKey) => alert(`selected ${selectedKey}`)}
+        className={styles.nav}
+      >
+        <div className={styles.logodiv}>
+        <Image className={styles.logo} src="/Logo.png" alt="logo" />
+        </div>
+        <Nav.Item>
+          <Nav.Link href="/about" className={styles.navtext}>About</Nav.Link>
+        </Nav.Item>
+        <Nav.Item >
+          <Nav.Link href="/catalog" eventKey="link-1" className={styles.navtext}>Catalog</Nav.Link>
+        </Nav.Item>
+        <Nav.Item >
+          <Nav.Link href="/whycode" eventKey="link-2" className={styles.navtext}>Why Code?</Nav.Link>
+        </Nav.Item>
+      </Nav>
 
       {children}
     </section>
