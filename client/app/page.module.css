@@ -1,8 +1,12 @@
+
+
 .main {
 
   margin: 0;
-
   overflow-x: hidden;
+  font-family: Inter, Space Grotesk;
+
+ 
 
 }
 
@@ -10,4 +14,25 @@
   color: black;
   text-align: center;
   font-size: 2em;
+}
+
+.nav {
+
+  position: relative;
+  background-color: #D9D9D9;
+  font-size: 1.5rem;
+  
+}
+
+.navtext {
+
+  color: black !important;
+}
+
+
+
+.logo{
+  
+  height: 100px;
+  width: 100px;
 }
