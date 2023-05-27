@@ -1,0 +1,16 @@
+.main {
+    text-align: center;
+    font-family: Inter, Space Grotesk;
+}
+
+.whycodetitle {
+    position: relative;
+    font-size: 3rem;
+    margin-top: .5em;
+}
+
+.whycodeparagraph {
+    position: relative;
+    font-size: 1.6rem;
+    padding: 2em;
+}
