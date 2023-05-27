@@ -1,6 +1,17 @@
 .main {
     text-align: center;
+    font-family: Inter, Space Grotesk;
+
+
 }
-.about-title {
-    font-size: 1.5em;
+.abouttitle {
+    position: relative;
+    margin-top: 10px;
+    font-size: 4rem;
+
+}
+.aboutparagraph {
+    position: relative;
+    font-size: 1.5rem;
+    padding: 2em;
 }

@@ -26,7 +26,7 @@ export default function Layout({
         className={styles.nav}
       >
         <div className={styles.logodiv}>
-        <Image className={styles.logo} src="/Logo.png" alt="logo" />
+        <Link href="/"><Image className={styles.logo} src="/Logo.png" alt="logo" /></Link>
         </div>
         <Nav.Item>
           <Nav.Link href="/about" className={styles.navtext}>About</Nav.Link>
