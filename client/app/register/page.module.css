@@ -1,0 +1,28 @@
+.main{
+    position: relative;
+    overflow-y:hidden;
+    height: 100vh;
+    justify-content: center;
+
+    
+}
+.registerTitle {
+    position: relative;
+    font-size: 3rem;
+    margin-top: .5em;
+}
+
+.registerContainer {
+    position: relative;
+    margin-top: 10em;
+    height: 10em;
+    width: 20em;
+}
+
+.buttonRegister {
+    position: relative;
+    margin-top: 1em;
+    padding-left: 5em;
+    padding-right: 5em;
+
+}

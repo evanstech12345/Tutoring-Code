@@ -1,0 +1,21 @@
+.main {
+    position: relative;
+    overflow-y:hidden;
+}
+
+.nav {
+    height: 100vh;
+    display: block;
+    float: left;
+    padding: 3em;
+    background-color: #979797;
+    border-style: solid;
+    border-left: black;
+    /* border-right: black; */
+    border-bottom: black;
+}
+
+.navitem {
+    color: black;
+    padding-top: 4em;
+}
