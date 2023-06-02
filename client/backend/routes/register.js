@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
 
     //return new user
     res.status(201).json(user);
-
+    console.log(token);
 
 
   } catch (error) {
@@ -54,7 +54,7 @@ router.post('/register', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
-
+  
 })
 
 
