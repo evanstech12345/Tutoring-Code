@@ -11,21 +11,17 @@ import NavLink from "react-bootstrap/NavLink";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { Container } from "react-bootstrap";
+import { useRouter } from "next/router";
 
-// const DynamicNav = dynamic(() => import("react-bootstrap/Nav"), {
-//   ssr: false, // Disable server-side rendering for this component
-// });
+export default function Layout({ children }) {
 
-export default function Layout({
-  children, // will be a page or nested layout
-}) {
-  const handleSelect = (eventKey) => alert(`selected ${eventKey}`);
   return (
-    <section className={styles.main}>
+    <html>
+    <body className={styles.main}>
       {/* Include shared UI here e.g. a header or sidebar */}
+
       <Nav
         activeKey="/home"
-        onSelect={handleSelect}
         className={styles.nav}
       >
         <div className={styles.logodiv}>
@@ -66,8 +62,10 @@ export default function Layout({
           </Nav.Link>
         </Nav.Item>
       </Nav>
-
       {children}
-    </section>
+
+    </body>
+    </html>
+
   );
 }

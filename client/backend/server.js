@@ -16,11 +16,13 @@ app.use(bodyParser.json())
 app.use(express.json())
 
 //cors middleware
-app.use(cors())
+app.use(cors());
 
-app.get('/products/:id', function (req, res, next) {
-  res.json({msg: 'this is CORS-enabled for all origins'})
-})
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // Replace with the origin of your frontend
+  })
+);
 
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(() => console.log("connected to database")).catch(err => console.log(err))
