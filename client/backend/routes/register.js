@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
 
     //return new user
     res.status(201).json(user);
-    console.log(token);
+    console.log("register token", token);
 
 
   } catch (error) {
@@ -55,50 +55,52 @@ router.post('/register', async (req, res) => {
 })
 
 
-router.post('/login', async (req, res) => {
-  try {
-    // Get user data
-    const { email, password } = req.body;
+// router.post('/login', async (req, res) => {
+//   try {
+//     // Get user data
+//     const email = req.body.email;
+//     const password = req.body.password;
 
-    // Validate user data
-    if (!(email && password)) {
-      res.status(400).send("All input fields are required");
-    }
+//     // Validate user data
+//     if (!(email && password)) {
+//       res.status(400).send("All input fields are required");
+//     }
 
-    // Check if user exists
-    const user = await User.findOne({ email });
+//     // Check if user exists
+//     const user = await User.findOne({ email });
 
-    if (!user) {
-      res.status(401).send("Invalid credentials");
-    }
+//     if (!user) {
+//       res.status(401).send("Invalid credentials");
+//     }
 
-    // Check password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+//     // Check password
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-      res.status(401).send("Invalid credentials");
-    }
+//     if (!isPasswordValid) {
+//       res.status(401).send("Invalid credentials");
+//     }
 
-    // Create JWT token
-    const token = jwt.sign(
-      { user_id: user._id, email },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+//     // Create JWT token
+//     const token = jwt.sign(
+//       { email: req.body.email },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "1h",
+//       }
+//     );
 
-    // Save user token
-    user.token = token;
+//     // Save user token
+//     user.token = token;
 
-    // Return user and token
-    res.status(200).json({ user, token });
-    console.log(token);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred");
-  }
-})
+//     // Return user and token
+//     res.status(200).json({ user, token });
+//     console.log("login", token);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("An error occurred");
+//   }
+// })
+
 
 
 

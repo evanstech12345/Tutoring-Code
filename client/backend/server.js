@@ -4,7 +4,9 @@ const app = express()
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const authRegister = require('./routes/register');
+const authLogin = require('./routes/login');
 const authMiddleware = require("./routes/middleware")
+
 require('dotenv').config()
 
 
@@ -35,5 +37,6 @@ app.get('/home', authMiddleware, function (req, res) {
 
 
 app.use('/api/user', authRegister)
+app.use('/api/user', authLogin)
 app.use(authMiddleware)
 app.listen(4000, () => console.log("listening on port 4000"))
