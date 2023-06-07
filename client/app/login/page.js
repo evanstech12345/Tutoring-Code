@@ -9,8 +9,11 @@ import Button from "react-bootstrap/Button";
 import Link from "next/link";
 import { redirect } from 'next/navigation';
 import axios from "axios";
+import Alert from 'react-bootstrap/Alert';
+
 
 export default function Login() {
+  const [show, setShow] = useState(false);
   const [token, setToken] = useState("");
   //checking if user has a token
 
@@ -37,7 +40,7 @@ export default function Login() {
         },
       }
 
-    )
+    ).then((res) => setShow(true))
 
     console.log(response.data.token)
 
@@ -60,6 +63,9 @@ export default function Login() {
 
   return (
     <div className={style.main}>
+      <Alert show={show} variant="success">
+        <h1>You are Logged In!</h1>
+      </Alert>
       <h1 className={style.registerTitle}>Login</h1>
       <Container className={style.registerContainer}>
         <Form onSubmit={login}>
@@ -85,7 +91,7 @@ export default function Login() {
               
             />
           </FloatingLabel>
-
+          <h3 className={style.dontHaveAccount}><Link  href="/register">Dont have an Account?</Link></h3>
           <Button className={style.buttonRegister} type="submit">
             Submit
           </Button>

@@ -1,6 +1,9 @@
 "use client";
-import React from "react";
+//  import "bootstrap/dist/css/bootstrap.min.css";
+
 import style from "./page.module.css";
+
+import React from "react";
 import Container from "react-bootstrap/Container";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
@@ -8,11 +11,16 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Link from "next/link";
 import axios from "axios";
+import { redirect } from 'next/navigation'
+import Alert from 'react-bootstrap/Alert';
+
 
 export default function Register() {
+  const [show, setShow] = useState(false);
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const register = (e) => {
+
     e.preventDefault(); //prevents the default behavior of submitting the form
 
 
@@ -28,12 +36,15 @@ export default function Register() {
         password: registerPassword,
       }), // Convert the data to JSON format
     })
-      .then((res) => console.log(res))
+      .then((res) => setShow(true))
       .catch((err) => console.log(err));
-  };
+  }
 
   return (
     <div className={style.main}>
+      <Alert show={show} variant="success">
+        <h1>You are Signed in! Please Login</h1>
+      </Alert>
       <h1 className={style.registerTitle}>Register</h1>
       <Container className={style.registerContainer}>
         <Form onSubmit={register}>
@@ -60,7 +71,7 @@ export default function Register() {
             />
           </FloatingLabel>
           <h3 className={style.loginLink}><Link href="/login">Already have an account?</Link></h3>
-          <Button className={style.buttonRegister} type="submit">
+         <Button className={style.buttonRegister} type="submit">
             Submit
           </Button>
         </Form>
