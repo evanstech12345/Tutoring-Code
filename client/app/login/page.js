@@ -17,19 +17,44 @@ export default function Login() {
   
 
   const login = async (e) => {
-    axios({
-      method: "post",
-      url: "http://localhost:4000/api/user/login",
-      data: {
-        email,
-        password
-      },
-    })
-    const formData = new FormData(e.target);
-    const email = formData.get('email');
-    const password = formData.get('password');
-    const { token } = response.data;
-    setToken(token);
+    e.preventDefault();
+
+  
+    try{
+      const formData = new FormData(e.target);
+      const email = formData.get('email');
+      const password = formData.get('password');
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:4000/api/user/login",
+        data: {
+          email,
+          password
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token // Set the Content-Type header
+        },
+      }
+
+    )
+
+    console.log(response.data.token)
+
+  if (response.data && response.data.token) {
+        const { token } = response.data;
+        setToken(token);
+        console.log("Login succesful. email: " + email+ "token: " + token)
+        // Perform further actions with the token, such as storing it in localStorage or redirecting to a new page
+      } else {
+        // Handle the case when the token is not present in the response
+        console.error("Token not found in response");
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
 
@@ -37,7 +62,7 @@ export default function Login() {
     <div className={style.main}>
       <h1 className={style.registerTitle}>Login</h1>
       <Container className={style.registerContainer}>
-        <Form>
+        <Form onSubmit={login}>
           <FloatingLabel
             controlId="floatingInput"
             label="Email address"

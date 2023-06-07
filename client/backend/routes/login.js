@@ -44,9 +44,10 @@ router.post('/login', async (req, res) => {
   
       // Save user token
       user.token = token;
+
   
       // Return user and token
-      res.status(200).json({ user, token });
+      res.json({ user, token });
       console.log("login", token);
     } catch (error) {
       console.log(error);

@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 app.use(express.json())
 
 //cors middleware
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
@@ -35,8 +35,8 @@ app.get('/home', authMiddleware, function (req, res) {
   res.status(200).send('Hello World!')
 })
 
-
 app.use('/api/user', authRegister)
 app.use('/api/user', authLogin)
 app.use(authMiddleware)
+
 app.listen(4000, () => console.log("listening on port 4000"))

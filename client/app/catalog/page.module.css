@@ -15,12 +15,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .card {
     height: 21em;
     width: 18em;
-
+    background: rgb(216, 216, 216);
     /* display: flex;
     justify-content: center;
     align-items: center; */
