@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 const verifyToken = (req, res, next) => {
-    const token =
+    const token = process.env.JWT_SECRET
     req.body.token || req.query.token || req.headers['x-access-token'];
+    console.log("Token: ", token);
 
     if(!token) {
         return res.status(403).send("A token is required")

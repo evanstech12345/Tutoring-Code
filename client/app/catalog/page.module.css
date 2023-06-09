@@ -11,7 +11,7 @@
 }
 .cardcontainer {
     position: relative;
-    top: 1em;
+    top: 5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,4 +51,19 @@
     justify-content: center;
     align-items: center;
     background: #008CFF;
+}
+
+.tabList {
+    position: relative;
+    padding: .5em;
+    color: #008CFF
+}
+
+.Link {
+    color: white;
+    text-decoration: none;
+}
+.Link:hover {
+    color: white;
+    text-decoration: none;
 }

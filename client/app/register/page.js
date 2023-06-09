@@ -30,6 +30,7 @@ export default function Register() {
       url: "http://localhost:4000/api/user/register",
       headers: {
         "Content-Type": "application/json", // Set the Content-Type header
+        
       },
       data: JSON.stringify({
         email: registerEmail,

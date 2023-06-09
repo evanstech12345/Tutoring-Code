@@ -6,7 +6,8 @@ const cors = require("cors")
 const authRegister = require('./routes/register');
 const authLogin = require('./routes/login');
 const authMiddleware = require("./routes/middleware")
-
+const payment = require('./routes/payment');
+const customer = require('./routes/customers');
 require('dotenv').config()
 
 
@@ -38,5 +39,6 @@ app.get('/home', authMiddleware, function (req, res) {
 app.use('/api/user', authRegister)
 app.use('/api/user', authLogin)
 app.use(authMiddleware)
-
+app.use('/api/payment', payment)
+app.use('/api/customer', customer)
 app.listen(4000, () => console.log("listening on port 4000"))

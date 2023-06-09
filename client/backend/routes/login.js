@@ -16,21 +16,21 @@ router.post('/login', async (req, res) => {
   
       // Validate user data
       if (!(email && password)) {
-        res.status(400).send("All input fields are required");
+        return res.status(400).send("All input fields are required");
       }
   
       // Check if user exists
       const user = await User.findOne({ email });
   
       if (!user) {
-        res.status(401).send("Invalid credentials");
+        return res.status(401).send("Invalid credentials");
       }
   
       // Check password
       const isPasswordValid = await bcrypt.compare(password, user.password);
   
       if (!isPasswordValid) {
-        res.status(401).send("Invalid credentials");
+        return res.status(401).send("Invalid credentials");
       }
   
       // Create JWT token
@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
       console.log("login", token);
     } catch (error) {
       console.log(error);
-      res.status(500).send("An error occurred");
+      return res.status(500).send("An error occurred");
     }
   })
   

@@ -12,10 +12,12 @@ import axios from "axios";
 import Alert from 'react-bootstrap/Alert';
 
 
+
 export default function Login() {
   const [show, setShow] = useState(false);
   const [token, setToken] = useState("");
-  //checking if user has a token
+
+
 
   
 
@@ -27,9 +29,15 @@ export default function Login() {
       const formData = new FormData(e.target);
       const email = formData.get('email');
       const password = formData.get('password');
+
+      //urls 
+      const loginUrl = "http://localhost:4000/api/user/login";
+      const customerUrl = "http://localhost:4000/api/customer";
+
+      // console.log(response.data.token);
       const response = await axios({
         method: "post",
-        url: "http://localhost:4000/api/user/login",
+        url: loginUrl,
         data: {
           email,
           password
@@ -41,19 +49,45 @@ export default function Login() {
       }
 
     ).then((res) => setShow(true))
+    .catch((error) => console.log("Error with Login Response" + error))
+    
 
-    console.log(response.data.token)
+    //sending to axios req simultaniously
+
+
+
+    console.log("Login response data" + response.data)
 
   if (response.data && response.data.token) {
-        const { token } = response.data;
+        const token = response.data;
         setToken(token);
         console.log("Login succesful. email: " + email+ "token: " + token)
+        const response2 = await axios({
+          url: customerUrl,
+          data: {
+            email,
+          },
+          headers: {
+            "x-access-token": token,
+          }
+        });
+        if (response2) {
+          console.log("Customer Data Success")
+        }
+
+        axios.all([response, response2], axios.spread((response, response2) => {
+          console.log("RESPONSE 1: " + response.data)
+          console.log("RESPONSE 2:" + response2.data)
+        }))
+        .catch((error) => {
+          console.error("ERROR: " + error)
+        });
+
         // Perform further actions with the token, such as storing it in localStorage or redirecting to a new page
       } else {
         // Handle the case when the token is not present in the response
         console.error("Token not found in response");
       }
-
     } catch (error) {
       console.log(error);
     }
