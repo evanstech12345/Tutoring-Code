@@ -43,9 +43,11 @@ export default function Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 8-10
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
-                  <Link className={styles.Link} href="/catalog/payment">$50 / hour</Link>
+                <form action="/api/payment/create-checkout-session" method="POST">
+                <Button className={styles.cardbtn} type="submit" variant="primary">
+                  $50 / hour
                 </Button>
+                </form>
               </Card.Body>
             </Card>
           </Col>

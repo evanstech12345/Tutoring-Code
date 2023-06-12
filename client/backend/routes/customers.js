@@ -7,22 +7,31 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 //creating the customer
 
+
 // const email = req.body.email;
-const getCustomers = async (req, res) => {
+router.post("/customer", async (req, res) => {
   try {
+
+    const email = req.body.email;
+
     const customers = await stripe.customers.list({
-      email: req.body.email,
+      email,
       payment_method: "pm_card_visa",
       invoice_settings: {
         default_payment_method: "pm_card_visa",
       },
     });
-   
-    console.log("customer created: " + email)
+
+    if (customers) {
+      console.log("customers reached in the backend: " + email)
+    } else {
+      console.log("Customer is not reached in the backend")
+    }
 
   } catch (error) {
+
     console.log("error creating customer" + error);
   }
-};
+});
 
 module.exports = router;

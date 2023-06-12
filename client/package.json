@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@restart/hooks": "^0.4.9",
+    "@stripe/react-stripe-js": "^2.1.0",
+    "@stripe/stripe-js": "^1.54.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "next": "^13.4.3",
@@ -17,6 +19,7 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "18.2.0",
     "react-tabs": "^6.0.1",
+    "stripe": "^12.9.0",
     "universal-cookie": "^4.0.4"
   }
 }

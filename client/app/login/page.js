@@ -15,8 +15,9 @@ import Alert from 'react-bootstrap/Alert';
 
 export default function Login() {
   const [show, setShow] = useState(false);
-  const [token, setToken] = useState("");
-
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  let [token, setToken] = useState("");
 
 
   
@@ -26,46 +27,36 @@ export default function Login() {
 
   
     try{
-      const formData = new FormData(e.target);
-      const email = formData.get('email');
-      const password = formData.get('password');
-
       //urls 
       const loginUrl = "http://localhost:4000/api/user/login";
-      const customerUrl = "http://localhost:4000/api/customer";
-
+      const customerUrl = "http://localhost:4000/api/stripe/customer";
       // console.log(response.data.token);
-      const response = await axios({
+      let response = await axios({
         method: "post",
         url: loginUrl,
         data: {
-          email,
-          password
+          email: loginEmail,
+          password: loginPassword
         },
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": token // Set the Content-Type header
+          "x-access-token": token, // Set the Content-Type header
         },
       }
 
-    ).then((res) => setShow(true))
+    ).then((response) => setShow(true))
+    // .then(data => response)
     .catch((error) => console.log("Error with Login Response" + error))
-    
 
-    //sending to axios req simultaniously
-
-
-
-    console.log("Login response data" + response.data)
 
   if (response.data && response.data.token) {
-        const token = response.data;
+        let token = response.data;
         setToken(token);
         console.log("Login succesful. email: " + email+ "token: " + token)
         const response2 = await axios({
           url: customerUrl,
           data: {
-            email,
+            email: loginEmail,
           },
           headers: {
             "x-access-token": token,
@@ -73,6 +64,8 @@ export default function Login() {
         });
         if (response2) {
           console.log("Customer Data Success")
+        } else {
+          console.log("Customer Data Failure")
         }
 
         axios.all([response, response2], axios.spread((response, response2) => {
@@ -84,12 +77,13 @@ export default function Login() {
         });
 
         // Perform further actions with the token, such as storing it in localStorage or redirecting to a new page
+
       } else {
         // Handle the case when the token is not present in the response
         console.error("Token not found in response");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error getting data from login" + error);
     }
 
   }
@@ -112,7 +106,8 @@ export default function Login() {
               type="email"
               placeholder="name@example.com"
               name="email"
-
+              
+              onChange={(e) => setLoginEmail(e.target.value)}
               
             />
           </FloatingLabel>
@@ -121,7 +116,7 @@ export default function Login() {
               type="password"
               placeholder="Password"
               name="password"
-
+              onChange={(e) => setLoginPassword(e.target.value)}
               
             />
           </FloatingLabel>
