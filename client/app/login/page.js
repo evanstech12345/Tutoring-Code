@@ -15,8 +15,6 @@ import Alert from 'react-bootstrap/Alert';
 
 export default function Login() {
   const [show, setShow] = useState(false);
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
   let [token, setToken] = useState("");
 
 
@@ -27,36 +25,45 @@ export default function Login() {
 
   
     try{
+      const formData = new FormData(e.target);
+      const email = formData.get('email');
+      const password = formData.get('password');
       //urls 
       const loginUrl = "http://localhost:4000/api/user/login";
       const customerUrl = "http://localhost:4000/api/stripe/customer";
-      // console.log(response.data.token);
-      let response = await axios({
+
+      const response = await axios({
+
         method: "post",
         url: loginUrl,
         data: {
-          email: loginEmail,
-          password: loginPassword
+          email,
+          password,
         },
         headers: {
           "Content-Type": "application/json",
           "x-access-token": token, // Set the Content-Type header
         },
+      });
+    
+      console.log(response); // To debug what the response is.
+    
+      if (response?.data) {
+        setShow(true);
+      } else {
+        // Maybe some additional error handling to gracefully handle missing `data`.
       }
-
-    ).then((response) => setShow(true))
-    // .then(data => response)
-    .catch((error) => console.log("Error with Login Response" + error))
-
+    setShow(true)
+      
 
   if (response.data && response.data.token) {
-        let token = response.data;
+        let token = response.data.token;
         setToken(token);
         console.log("Login succesful. email: " + email+ "token: " + token)
         const response2 = await axios({
           url: customerUrl,
           data: {
-            email: loginEmail,
+            email,
           },
           headers: {
             "x-access-token": token,
@@ -85,8 +92,9 @@ export default function Login() {
     } catch (error) {
       console.log("Error getting data from login" + error);
     }
-
   }
+
+ 
 
 
   return (
@@ -107,7 +115,7 @@ export default function Login() {
               placeholder="name@example.com"
               name="email"
               
-              onChange={(e) => setLoginEmail(e.target.value)}
+              
               
             />
           </FloatingLabel>
@@ -116,7 +124,7 @@ export default function Login() {
               type="password"
               placeholder="Password"
               name="password"
-              onChange={(e) => setLoginPassword(e.target.value)}
+              
               
             />
           </FloatingLabel>
