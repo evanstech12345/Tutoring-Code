@@ -10,13 +10,13 @@ const payment = require('./routes/payment');
 const customer = require('./routes/customers');
 require('dotenv').config()
 
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
 app.use(express.json())
+
 
 //cors middleware
 // app.use(cors());

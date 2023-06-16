@@ -3,9 +3,13 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../schema/model')
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 saltRounds = 10;
 require('dotenv').config()
+const middleware = require('./middleware')
 
+
+router.use(cookieParser())
 
 
 router.post('/login', async (req, res) => {
@@ -41,6 +45,14 @@ router.post('/login', async (req, res) => {
           expiresIn: "1h",
         }
       );
+
+      //saving the token in http-only cookie 
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600000,// 1 hour in milliseconds
+      })
+
 
       if(token) {
         console.log("token created")

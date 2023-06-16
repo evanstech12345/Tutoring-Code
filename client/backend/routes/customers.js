@@ -12,6 +12,7 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 router.post("/customer", async (req, res) => {
   try {
 
+    
     const email = req.body.email;
 
     const customers = await stripe.customers.list({

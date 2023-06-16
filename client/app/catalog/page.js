@@ -11,8 +11,37 @@ import { useState } from "react";
 import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
+import axios from "axios"
+import Cookies from "js-cookie";
 
-export default function Catalog() {
+export default function  Catalog() {
+  const [scratch, setScratch] = useState("")
+  const [python, setPythons] = useState("")
+  const [javascript, setJavaScript] = useState("")
+  const [webDev, setWebDev] = useState("")
+  const token = Cookies.get("token");
+  console.log("token from catalog " + token)
+
+  const checkout = () => {
+    axios({
+      method: "post",
+      url: "http://localhost:4000/api/payment/create-checkout-session",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      }
+    }).then(response => {
+      if (response.ok) return response.json();
+      return response.json().then(json => Promise.reject(json))
+    })
+    .then(({ url }) => {
+      window.location = url;
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
 
 
   return (
@@ -43,11 +72,11 @@ export default function Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 8-10
                 </Card.Subtitle>
-                <form action="/api/payment/create-checkout-session" method="POST">
-                <Button className={styles.cardbtn} type="submit" variant="primary">
+                {/* <form action="" method="POST"> */}
+                <Button className={styles.cardbtn} type="submit" variant="primary" onClick={checkout}>
                   $50 / hour
                 </Button>
-                </form>
+                {/* </form> */}
               </Card.Body>
             </Card>
           </Col>
