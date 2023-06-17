@@ -25,6 +25,7 @@ const calculateOrderAmount = (items) => {
 
 
 router.post("/create-checkout-session", middleware, async (req, res) => {
+  const url = "hi"
 
 
 
@@ -38,8 +39,10 @@ router.post("/create-checkout-session", middleware, async (req, res) => {
       enabled: true,
     },
   });
-
-  res.send({
+  if(url) {
+    return res.send(url)
+  }
+  return res.send({
     clientSecret: paymentIntent.client_secret,
   });
 

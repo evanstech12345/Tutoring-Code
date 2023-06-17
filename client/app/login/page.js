@@ -14,9 +14,6 @@ import Cookies from 'js-cookie'
 
 export default function Login() {
   const [show, setShow] = useState(false);
-  // let [token, setToken] = useState("");
-  const token = Cookies.get('token')
-  console.log("login token cookie: " + token)
   const login = async (e) => {
     e.preventDefault();
 
@@ -39,8 +36,6 @@ export default function Login() {
           "Content-Type": "application/json",
           'Accept': 'application/json',
 
-          "Authorization": "Bearer " + token
-
         },
       });
 
@@ -53,20 +48,13 @@ export default function Login() {
       }
       setShow(true);
 
-      
-
-
-
-      if (response.data) {
-        console
-          .log("Login succesful. email: " + email + " token: " + token)
-          // token = req.headers.authorization.split(' ')[1];
-          // jwt.verify(token)
-          
-
-        // Perform further actions with the token, such as storing it in localStorage or redirecting to a new page
+      if (response.data.accessToken && response.data.refreshToken) {
+        Cookies.set("accessToken", response.data.accessToken);
+        Cookies.set("refreshToken", response.data.refreshToken);
+        console.log(
+          "Access token: " + response.data.accessToken + " refreshToken: " + response.data.refreshToken
+        )
       } else {
-        // Handle the case when the token is not present in the response
         console.error("Token not found in response");
       }
     } catch (error) {

@@ -38,39 +38,48 @@ router.post('/login', async (req, res) => {
       }
   
       // Create JWT token
-      const token = jwt.sign(
+      const accessToken = jwt.sign(
         { email },
         process.env.JWT_SECRET,
         {
-          expiresIn: "1h",
+          expiresIn: process.env.ACCESS_TOKEN_LIFE,
+        }
+      );
+      //creating refresh token
+      const refreshToken = jwt.sign(
+        { email },
+        process.env.REFRESH_SECRET,
+        {
+          expiresIn: process.env.REFRESH_TOKEN_LIFE,
         }
       );
 
       //saving the token in http-only cookie 
-      res.cookie("token", token, {
+      res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,
         maxAge: 3600000,// 1 hour in milliseconds
       })
 
 
-      if(token) {
-        console.log("token created")
+      if(accessToken) {
+        console.log("access token created")
       }
 
   
       // Save user token
-      user.token = token;
+      user.token = accessToken, refreshToken;
 
   
       // Return user and token
-      res.json({ user, token });
-      console.log("login", token);
+      res.json({ user, accessToken, refreshToken });
+      console.log("login accesstoken, refreshToken", accessToken, refreshToken);
     } catch (error) {
       console.log(error);
       return res.status(500).send("An error occurred");
     }
   })
+
   
   
   

@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import styles from "./page.module.css";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
@@ -19,8 +19,10 @@ export default function  Catalog() {
   const [python, setPythons] = useState("")
   const [javascript, setJavaScript] = useState("")
   const [webDev, setWebDev] = useState("")
-  const token = Cookies.get("token");
-  console.log("token from catalog " + token)
+
+    const token = Cookies.get("accessToken");
+    const refreshToken = Cookies.get("refreshToken");
+   
 
   const checkout = () => {
     axios({
@@ -31,16 +33,18 @@ export default function  Catalog() {
         'Accept': 'application/json',
         "Authorization": `Bearer ${token}`,
       }
-    }).then(response => {
-      if (response.ok) return response.json();
-      return response.json().then(json => Promise.reject(json))
     })
-    .then(({ url }) => {
-      window.location = url;
+    .then((response) => {
+      const { data } = response;
+      if (data && data.url) {
+        window.location = data.url;
+      } else {
+        throw new Error("Invalid response from server");
+      }
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
 
