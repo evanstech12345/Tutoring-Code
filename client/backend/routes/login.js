@@ -63,16 +63,17 @@ router.post('/login', async (req, res) => {
 
 
       if(accessToken) {
-        console.log("access token created")
+        console.log("access token created", accessToken);
+
       }
 
   
       // Save user token
-      user.token = accessToken, refreshToken;
+      user.token = { accessToken, refreshToken }
 
   
       // Return user and token
-      res.json({ user, accessToken, refreshToken });
+      return res.json({ user, accessToken, refreshToken });
       console.log("login accesstoken, refreshToken", accessToken, refreshToken);
     } catch (error) {
       console.log(error);

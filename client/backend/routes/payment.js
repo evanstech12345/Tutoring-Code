@@ -1,51 +1,70 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../schema/model')
-require('dotenv').config()
-const jwt = require('jsonwebtoken')
-// const verifyTokenMiddleware = require('./middleware')
-const stripe = require('stripe')(process.env.STRIPE_KEY)
-const middleware = require('./middleware')
+const User = require('../schema/model');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+// const verifyTokenMiddleware = require('./middleware');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
+const middleware = require('./middleware');
+const cors = require('cors');
+const axios = require('axios');
 
 //! make a store items function with .map()
 
 const storeItems = new Map([
-  [1, { priceInCents: 10000, name: "scratch fun"}],
-  [2, {priceInCents: 10000, name: "web dev ninja"}]
-])
-
-const calculateOrderAmount = (items) => {
-  // Replace this constant with a calculation of the order's amount
-  // Calculate the order total on the server to prevent
-  // people from directly manipulating the amount on the client
-  return 1400;
-};
-
-
+  [1, { priceInCents: 10000, name: "scratch fun" }],
+  [2, { priceInCents: 10000, name: "web dev ninja" }]
+]);
 
 
 router.post("/create-checkout-session", middleware, async (req, res) => {
-  const url = "hi"
+
+  //sending the header with the post request
 
 
 
-  const { items } = req.body;
 
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: "usd",
-    automatic_payment_methods: {
-      enabled: true,
+
+  // const email = req.body.email;//!change to real email address
+
+  const price = await stripe.prices.create({
+    unit_amount: 500, // The price in cents
+    currency: 'usd',
+    product_data: {
+      name: 'Product Name',
     },
   });
-  if(url) {
-    return res.send(url)
-  }
-  return res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+  
+  const priceId = price.id;
+  console.log(priceId);
+  
 
-})
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price: `${priceId}`, // Replace with the Price ID
+          quantity: 1,
+        },
+      ],
+      // customer_email: {
+      //   email,
+      // },
+      mode: 'payment',
+      success_url: `${process.env.SUCCESSURL}?success=true`, // if successful payment
+      // cancel_url: `${process.env.FAILURL}?canceled=true`, // if payment is a failure
+    });
+
+    return res.json(200, session.url);
+    return res.setHeader('Access-Control-Allow-Origin', '*');
+    // return res.json({ sessionId: session.id });
+  } catch (error) {
+    console.log("error with payment checkout session: ", error);
+  }
+});
 
 module.exports = router;
+
+
+
+

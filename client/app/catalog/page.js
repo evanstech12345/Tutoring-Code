@@ -35,15 +35,19 @@ export default function  Catalog() {
       }
     })
     .then((response) => {
-      const { data } = response;
-      if (data && data.url) {
-        window.location = data.url;
+      const data = response.data;
+      console.log("response data from checkout: " + JSON.stringify(data))
+      if (data) {
+        const sessionUrl = data;
+        console.log("Session URL:", sessionUrl);
+        window.open(sessionUrl);
+        console.log("Window opened");
       } else {
-        throw new Error("Invalid response from server");
+        console.log("Invalid response data:", data);
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Error:", error);
     });
   }
 
@@ -76,7 +80,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 8-10
                 </Card.Subtitle>
-                {/* <form action="" method="POST"> */}
+                {/* <form action="/create-checkout-session" method="POST"> */}
                 <Button className={styles.cardbtn} type="submit" variant="primary" onClick={checkout}>
                   $50 / hour
                 </Button>

@@ -18,7 +18,13 @@ require('dotenv').config()
 
 const verifyToken = (req, res, next) => {
   //.split removes Beaerer and the spaces in the token string
-    const token = req.headers['authorization'].trim().split(' ')[1];
+    let token;
+    if (req.headers['authorization']) {
+      token = req.headers['authorization'].trim().split(' ')[1];
+      console.log("token from middleware: " + token);
+    } else {
+      console.log('token header is missing')
+    }
     console.log("Token: ", token);
     // console.log("Body: " + req.body.token + "query: " + req.query + "Headers: " + req.headers)//! this is showing undefined
   
