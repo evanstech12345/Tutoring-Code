@@ -7,6 +7,7 @@ const authRegister = require('./routes/register');
 const authLogin = require('./routes/login');
 const authMiddleware = require("./routes/middleware")
 const payment = require('./routes/payment');
+const subscription = require('./routes/subcription');
 const customer = require('./routes/customers');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 require('dotenv').config()
@@ -54,6 +55,7 @@ app.use('/api/user', authLogin)
 app.use(authMiddleware)
 
 app.use('/api/payment', payment)
+app.use('/api/subscription', subscription)
 app.use('/api/stripe', customer)
 
 

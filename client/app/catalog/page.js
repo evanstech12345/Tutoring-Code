@@ -82,6 +82,57 @@ export default function  Catalog() {
   }
 
 
+  const subscriptionCheckout = e => {
+      //getting the product names from their elements
+  //!using virtual DOM elements
+  //!need to fix the circular error
+
+
+
+
+
+  //get the element id of the element that is clicked 
+    // const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
+    // const pythonPro = JSON.stringify(document.getElementById('python').innerText)
+    // const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
+    // const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
+
+    const elementClicked = e.currentTarget.id
+
+
+    
+
+
+    axios({
+      method: "post",
+      url: "http://localhost:4000/api/subscription/create-checkout-session",
+      data: {
+        elementClicked,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        "Authorization": `Bearer ${token}`,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+      console.log("response data from subscriptionCheckout: " + data)//!json.stringify is failing circuler
+      if (data) {
+        const sessionUrl = data;
+        console.log("Session URL:", sessionUrl);
+        window.open(sessionUrl);
+        console.log("Window opened");
+      } else {
+        console.log("Invalid response data-subscription:", data);
+      }
+    })
+    .catch((error) => {
+      console.log("subscription-Error:", error);
+    });
+  }
+
+
   return (
     <div className={styles.main}>
       <Tabs>
@@ -216,7 +267,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 8-10
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="scratchFun" className={styles.cardbtn} variant="primary" onClick={subscriptionCheckout}>
                 $30 / week
 
                 </Button>
@@ -238,7 +289,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="pythonPro" className={styles.cardbtn} variant="primary" onClick={subscriptionCheckout}>
                 $30 / week
 
                 </Button>
@@ -262,7 +313,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="javascriptPro" className={styles.cardbtn} variant="primary" onClick={subscriptionCheckout}>
                   $30 / week
                 </Button>
               </Card.Body>
@@ -285,7 +336,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 12+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="webdevNinja" className={styles.cardbtn} variant="primary" onClick={subscriptionCheckout}>
                 $30 / week
 
                 </Button>
