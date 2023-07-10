@@ -19,22 +19,14 @@ const storeItems = new Map([
 
 router.post("/create-checkout-session", middleware, async (req, res) => {
 
-  //sending the header with the post request
-  const scratchFun = req.body.scratchFun;
-  const javascriptPro = req.body.javascriptPro;
-  const pythonPro = req.body.pythonPro;
-  const webDevNinja = req.body.WebDevNinja;
-
-  
-
-
-  // const email = req.body.email;//!change to real email address
+  //getting the clicked element
+  const elementClicked = req.body.elementClicked;
 
   const price = await stripe.prices.create({
     unit_amount: 5000, // The price in cents
     currency: 'usd',
     product_data: {
-      name: `${scratchFun}`,
+      name: `${elementClicked}`,
     },
   });
   
@@ -50,9 +42,6 @@ router.post("/create-checkout-session", middleware, async (req, res) => {
           quantity: 1,
         },
       ],
-      // customer_email: {
-      //   email,
-      // },
       mode: 'payment',
       success_url: `${process.env.SUCCESSURL}?success=true`, // if successful payment
       cancel_url: `${process.env.FAILURL}?canceled=true`, // if payment is a failure

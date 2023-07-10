@@ -35,11 +35,18 @@ export default function  Catalog() {
   //getting the product names from their elements
   //!using virtual DOM elements
   //!need to fix the circular error
-    const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
-    const pythonPro = JSON.stringify(document.getElementById('python').innerText)
-    const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
-    const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
 
+
+
+
+
+  //get the element id of the element that is clicked 
+    // const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
+    // const pythonPro = JSON.stringify(document.getElementById('python').innerText)
+    // const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
+    // const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
+
+    const elementClicked = e.currentTarget.id
 
 
     
@@ -49,10 +56,7 @@ export default function  Catalog() {
       method: "post",
       url: "http://localhost:4000/api/payment/create-checkout-session",
       data: {
-        scratchFun,
-        pythonPro,
-        javascriptPro,
-        webDevNinja,
+        elementClicked,
       },
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +111,7 @@ export default function  Catalog() {
                   Ages: 8-10
                 </Card.Subtitle>
                 {/* <form action="/create-checkout-session" method="POST"> */}
-                <Button className={styles.cardbtn} type="submit" variant="primary" onClick={checkout}>
+                <Button id="scratchFun" className={styles.cardbtn} type="submit" variant="primary" onClick={checkout}>
                   $50 / hour
                 </Button>
                 {/* </form> */}
@@ -129,7 +133,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="pythonPro" className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
                 </Button>
               </Card.Body>
@@ -152,7 +156,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button id="javascriptPro" className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
 
                 </Button>
@@ -176,7 +180,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 12+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
+                <Button  id="webdevNinja" className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
                 </Button>
               </Card.Body>
