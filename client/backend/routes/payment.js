@@ -20,18 +20,21 @@ const storeItems = new Map([
 router.post("/create-checkout-session", middleware, async (req, res) => {
 
   //sending the header with the post request
+  const scratchFun = req.body.scratchFun;
+  const javascriptPro = req.body.javascriptPro;
+  const pythonPro = req.body.pythonPro;
+  const webDevNinja = req.body.WebDevNinja;
 
-
-
+  
 
 
   // const email = req.body.email;//!change to real email address
 
   const price = await stripe.prices.create({
-    unit_amount: 500, // The price in cents
+    unit_amount: 5000, // The price in cents
     currency: 'usd',
     product_data: {
-      name: 'Product Name',
+      name: `${scratchFun}`,
     },
   });
   
@@ -52,10 +55,10 @@ router.post("/create-checkout-session", middleware, async (req, res) => {
       // },
       mode: 'payment',
       success_url: `${process.env.SUCCESSURL}?success=true`, // if successful payment
-      // cancel_url: `${process.env.FAILURL}?canceled=true`, // if payment is a failure
+      cancel_url: `${process.env.FAILURL}?canceled=true`, // if payment is a failure
     });
 
-    return res.json(200, session.url);
+    return res.status(200).json(session.url)
     return res.setHeader('Access-Control-Allow-Origin', '*');
     // return res.json({ sessionId: session.id });
   } catch (error) {

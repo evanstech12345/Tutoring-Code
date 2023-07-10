@@ -13,21 +13,47 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import axios from "axios"
 import Cookies from "js-cookie";
+import ReactDOM from 'react-dom'
 
 export default function  Catalog() {
-  const [scratch, setScratch] = useState("")
-  const [python, setPythons] = useState("")
-  const [javascript, setJavaScript] = useState("")
-  const [webDev, setWebDev] = useState("")
 
-    const token = Cookies.get("accessToken");
+
+
+
+
+
+    let token = Cookies.get("accessToken");
+    
     const refreshToken = Cookies.get("refreshToken");
+    if(!token) {
+      token = refreshToken;
+      console.log("Refresh token is now set to token")
+    }
    
 
-  const checkout = () => {
+  const checkout = (e) => {
+  //getting the product names from their elements
+  //!using virtual DOM elements
+  //!need to fix the circular error
+    const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
+    const pythonPro = JSON.stringify(document.getElementById('python').innerText)
+    const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
+    const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
+
+
+
+    
+
+
     axios({
       method: "post",
       url: "http://localhost:4000/api/payment/create-checkout-session",
+      data: {
+        scratchFun,
+        pythonPro,
+        javascriptPro,
+        webDevNinja,
+      },
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -36,7 +62,7 @@ export default function  Catalog() {
     })
     .then((response) => {
       const data = response.data;
-      console.log("response data from checkout: " + JSON.stringify(data))
+      console.log("response data from checkout: " + data)//!json.stringify is failing circuler
       if (data) {
         const sessionUrl = data;
         console.log("Session URL:", sessionUrl);
@@ -68,7 +94,7 @@ export default function  Catalog() {
           <Col sm>
             <Card className={styles.card}>
               <Card.Body>
-                <Card.Title className={styles.cardtitle}>
+                <Card.Title name="scratchFun" id="scratch" className={styles.cardtitle}>
                   Scratch Fun
                 </Card.Title>
                 <hr></hr>
@@ -93,7 +119,7 @@ export default function  Catalog() {
           <Col sm>
             <Card className={styles.card}>
               <Card.Body>
-                <Card.Title className={styles.cardtitle}>Python Pro</Card.Title>
+                <Card.Title className={styles.cardtitle} id="python" name="pythonPro">Python Pro</Card.Title>
                 <hr></hr>
                 <Card.Text className={styles.cardtext}>
                   Hands on programming while learning the basics of the most
@@ -103,7 +129,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
                 </Button>
               </Card.Body>
@@ -114,7 +140,7 @@ export default function  Catalog() {
           <Col sm>
             <Card className={styles.card}>
               <Card.Body>
-                <Card.Title className={styles.cardtitle}>
+                <Card.Title className={styles.cardtitle} id="javascript" name="JavascriptPro">
                   Javascript Pro
                 </Card.Title>
                 <hr></hr>
@@ -126,7 +152,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
 
                 </Button>
@@ -138,7 +164,7 @@ export default function  Catalog() {
           <Col sm>
             <Card className={styles.card}>
               <Card.Body>
-                <Card.Title className={styles.cardtitle}>
+                <Card.Title className={styles.cardtitle} id="webdev" name="WebDevNinja">
                   Web Dev Ninja
                 </Card.Title>
                 <hr></hr>
@@ -150,7 +176,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 12+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $50 / hour
                 </Button>
               </Card.Body>
@@ -186,7 +212,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 8-10
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $30 / week
 
                 </Button>
@@ -208,7 +234,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $30 / week
 
                 </Button>
@@ -232,7 +258,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 10+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                   $30 / week
                 </Button>
               </Card.Body>
@@ -255,7 +281,7 @@ export default function  Catalog() {
                 <Card.Subtitle className={styles.cardsub}>
                   Ages: 12+
                 </Card.Subtitle>
-                <Button className={styles.cardbtn} variant="primary">
+                <Button className={styles.cardbtn} variant="primary" onClick={checkout}>
                 $30 / week
 
                 </Button>
