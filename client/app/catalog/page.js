@@ -14,43 +14,21 @@ import "react-tabs/style/react-tabs.css";
 import axios from "axios"
 import Cookies from "js-cookie";
 import ReactDOM from 'react-dom'
+import jwtDecode from 'jsonwebtoken';
 
-export default function  Catalog() {
-
-
-
+export default function Catalog() {
 
 
-
-    let token = Cookies.get("accessToken");
-    
-    const refreshToken = Cookies.get("refreshToken");
-    if(!token) {
-      token = refreshToken;
-      console.log("Refresh token is now set to token")
-    }
-   
+  
 
   const checkout = (e) => {
   //getting the product names from their elements
-  //!using virtual DOM elements
-  //!need to fix the circular error
-
-
-
-
-
-  //get the element id of the element that is clicked 
-    // const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
-    // const pythonPro = JSON.stringify(document.getElementById('python').innerText)
-    // const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
-    // const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
 
     const elementClicked = e.currentTarget.id
-
-
     
-
+    
+    let token = Cookies.get("accessToken");
+    let refreshToken = Cookies.get("refreshToken");
 
     axios({
       method: "post",
@@ -66,42 +44,57 @@ export default function  Catalog() {
     })
     .then((response) => {
       const data = response.data;
-      console.log("response data from checkout: " + data)//!json.stringify is failing circuler
+      console.log("response data from checkout: " + data)
       if (data) {
         const sessionUrl = data;
         console.log("Session URL:", sessionUrl);
         window.open(sessionUrl);
         console.log("Window opened");
+        
       } else {
         console.log("Invalid response data:", data);
       }
+      
     })
     .catch((error) => {
-      console.log("Error:", error);
+      if(error.response && error.response.status === 401) {
+        token = refreshToken
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        console.log("refreshToken:" + token);
+        axios({
+          method: "post",
+          url: "http://localhost:4000/api/payment/create-checkout-session",
+          data: {
+            elementClicked,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "Authorization": `Bearer ${token}`,
+          }
+        })
+        .then((response) => {
+          console.log("refresh token response: ", response);
+          console.log("Catalog Status: ", response.status);
+          if(error.response && error.response.status === 401) {
+            response.status(401).send("Unauthorized");
+
+          }
+        })
+        .catch((error, response) => {
+          console.log("refresh token response error: ", error)
+
+        })
+      } else {
+        console.log("Error in the frontend: ", error)
+      }
     });
   }
 
 
   const subscriptionCheckout = e => {
-      //getting the product names from their elements
-  //!using virtual DOM elements
-  //!need to fix the circular error
-
-
-
-
-
-  //get the element id of the element that is clicked 
-    // const scratchFun = JSON.stringify(document.getElementById('scratch').innerText)
-    // const pythonPro = JSON.stringify(document.getElementById('python').innerText)
-    // const javascriptPro = JSON.stringify(document.getElementById('javascript').innerText)
-    // const webDevNinja = JSON.stringify(document.getElementById('webdev').innerText)
 
     const elementClicked = e.currentTarget.id
-
-
-    
-
 
     axios({
       method: "post",

@@ -29,6 +29,7 @@ app.use(express.json())
 app.use(
   cors({
     origin: 'http://localhost:3000', // Replace with the origin of your frontend
+    allowedHeaders: ['Content-Type', 'Authorization'],
     // 'Access-Control-Allow-Origin': 'https://checkout.stripe.com/c/pay/cs_test_a1oubz3AlWI7Py55ponAPzYt4a7JsQw9reUHiQVKMWzh0jPQXmKw1d0n4t'
   })
 );

@@ -57,14 +57,24 @@ router.post('/login', async (req, res) => {
       //saving the token in http-only cookie 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: true,
-        maxAge: 3600000,// 1 hour in milliseconds
+        secure: false,
+        maxAge: 120000,// 1 hour in milliseconds
+      })
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 2592000000
       })
 
 
       if(accessToken) {
         console.log("access token created", accessToken);
 
+      }
+
+      if(refreshToken) {
+        console.log("refresh token created", refreshToken);
       }
 
   

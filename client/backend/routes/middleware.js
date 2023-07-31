@@ -11,14 +11,27 @@ require('dotenv').config()
 
 
 
-
 //this is used so that only authenticated users with the right token can access
+  router.use(cookieParser());
 
 
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   //.split removes Beaerer and the spaces in the token string
-    let token;
+
+  
+
+
+
+
+
+
+
+
+
+  let token;
+  let refreshToken;
+
     if (req.headers['authorization']) {
       token = req.headers['authorization'].trim().split(' ')[1];
       console.log("token from middleware: " + token);
@@ -28,14 +41,100 @@ const verifyToken = (req, res, next) => {
     console.log("Token: ", token);
     // console.log("Body: " + req.body.token + "query: " + req.query + "Headers: " + req.headers)//! this is showing undefined
   
-    if (!token) {
-      return res.status(403).send("A token is required");
+
+    //checking if the refresh token exists 
+    if(req.cookies && req.cookies.refreshToken) {
+      refreshToken = req.cookies.refreshToken
+      console.log("refresh token exists:", refreshToken )
+    } else {
+      console.log("refresh token doesnt exist")
+    }
+
+
+    if (!token && !refreshToken) {
+      return res.status(401).send("Unauthorized");
     }
   
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next();
+
+      if(token) {
+        try{
+
+        const decodedAccess = jwt.verify(token, process.env.JWT_SECRET)
+        console.log("decoded access:", decodedAccess)
+        req.user = decodedAccess;
+        return next();
+        } catch (error){
+          console.log("error with decoding the access token: " + error)
+        }
+      }
+
+      if (refreshToken) {
+        try {
+          const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
+          console.log("decoded Refresh: ", decodedRefresh);
+      
+          // Making a new access token using the email from the refresh token decode.
+          const newAccessToken = jwt.sign(
+            { email: decodedRefresh.email },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: process.env.ACCESS_TOKEN_LIFE,
+            }
+          );
+      
+          res.cookie("accessToken", newAccessToken, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 120000, // Convert seconds to milliseconds
+          });
+      
+          // Continue with the request
+          req.user = jwt.verify(newAccessToken, process.env.JWT_SECRET);
+          return next();
+        } catch (err) {
+          // If refresh token verification also fails, the tokens are invalid.
+          return res.status(401).send("Invalid tokens, this is the error message: " + err);
+        }
+      }
+      
+      
+      
+
+      // if(refreshToken) {
+      //   const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET)
+      //   console.log("decoded Refresh: ", decodedRefresh)
+      //   //making a new access token and obtaining the email from the refresh token decode 
+      //   const newAccessToken = jwt.sign( //access token that will be used in refresh 
+      //   { email: decodedRefresh.email },
+      //   process.env.JWT_SECRET,
+      //   {
+      //     expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      //   },
+      //   console.log("New Access Token Created: ", newAccessToken, "refresh token decoded: ", decodedRefresh)
+      // );
+      // res.cookie("accessToken", newAccessToken, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   maxAge: 120000, // Convert seconds to milliseconds
+      // });
+
+      // // Continue with the request
+      // req.user = jwt.verify(newAccessToken, process.env.JWT_SECRET);
+      // return next();
+      // }
+
+
+      // let decoded;
+      // if(res.status === 401){//!I have to find out how to get the status of the frontend response
+        
+      //   decoded = jwt.verify(newAccessToken, process.env.REFRESH_SECRET)
+      //   console.log("decoded refresh secret, making new access token: ", JSON.stringify(decoded), "This is the refresh token: ", token)
+      // } 
+      // else {
+      //   decoded = jwt.verify(token, process.env.JWT_SECRET);
+      //   console.log("decoded access secret: ", JSON.stringify(decoded), "This is the access token: ", token)
+      // }
     } catch (err) {
       return res.status(401).send("Invalid token, this is the error message:" + err);
     }
