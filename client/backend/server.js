@@ -9,7 +9,10 @@ const authMiddleware = require("./routes/middleware")
 const payment = require('./routes/payment');
 const subscription = require('./routes/subcription');
 const customer = require('./routes/customers');
+const cookieParser = require('cookie-parser');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 require('dotenv').config()
 
 
@@ -22,17 +25,18 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
 app.use(express.json())
+app.use(cookieParser())
 
 
 //cors middleware
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000', // Replace with the origin of your frontend
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    // 'Access-Control-Allow-Origin': 'https://checkout.stripe.com/c/pay/cs_test_a1oubz3AlWI7Py55ponAPzYt4a7JsQw9reUHiQVKMWzh0jPQXmKw1d0n4t'
-  })
-);
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with the actual origin of your frontend
+  credentials: true, // Allow credentials (cookies)
+};
+
+// Use the cors middleware with the configured options
+app.use(cors(corsOptions));
 
 
 
@@ -40,9 +44,29 @@ app.use(
 
 
 
+
+
+//creating session store
+const store = new MongoDBStore({
+  uri: process.env.MONGO_URL,
+  collection: 'sessions',
+});
+
+//session
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
+  cookie: {
+    maxAge: 2592000000, //you have to set the age directly
+    secure: false, //!set to true during production
+    httpOnly: true
+  }
+}))
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true }).then(() => console.log("connected to database")).catch(err => console.log(err))
-
 
 
 app.get('/home', authMiddleware, function (req, res) {
@@ -51,8 +75,8 @@ app.get('/home', authMiddleware, function (req, res) {
 
 
 
-app.use('/api/user', authRegister)
-app.use('/api/user', authLogin)
+app.use('/api/user', cors(corsOptions), authRegister)
+app.use('/api/user', cors(corsOptions), authLogin)
 app.use(authMiddleware)
 
 app.use('/api/payment', payment)

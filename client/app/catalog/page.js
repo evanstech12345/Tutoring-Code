@@ -14,32 +14,40 @@ import "react-tabs/style/react-tabs.css";
 import axios from "axios"
 import Cookies from "js-cookie";
 import ReactDOM from 'react-dom'
-import jwtDecode from 'jsonwebtoken';
+// import jwtDecode from 'jsonwebtoken';
 
 export default function Catalog() {
 
 
-  
 
-  const checkout = (e) => {
+  const checkout = async (e) => {
   //getting the product names from their elements
 
     const elementClicked = e.currentTarget.id
     
-    
-    let token = Cookies.get("accessToken");
-    let refreshToken = Cookies.get("refreshToken");
+    let csrfToken = getCsrfToken();
+    let sessionToken = getSessionToken();
+
+
+    // let token = Cookies.get("accessToken");
+    // let refreshToken = Cookies.get("refreshToken");
+
+    // console.log("accessToken: ", token)
+    // console.log("refreshToken: ", refreshToken)
+   
 
     axios({
       method: "post",
       url: "http://localhost:4000/api/payment/create-checkout-session",
       data: {
         elementClicked,
+
       },
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Authorization": `Bearer ${token}`,
+        'X-CSRF-Token': csrfToken, //include the CSRF token header
+        'X-Session-Token': sessionToken // include the session token header
       }
     })
     .then((response) => {
@@ -57,42 +65,39 @@ export default function Catalog() {
       
     })
     .catch((error) => {
-      if(error.response && error.response.status === 401) {
-        token = refreshToken
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        console.log("refreshToken:" + token);
-        axios({
-          method: "post",
-          url: "http://localhost:4000/api/payment/create-checkout-session",
-          data: {
-            elementClicked,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "Authorization": `Bearer ${token}`,
-          }
-        })
-        .then((response) => {
-          console.log("refresh token response: ", response);
-          console.log("Catalog Status: ", response.status);
-          if(error.response && error.response.status === 401) {
-            response.status(401).send("Unauthorized");
+      // if(error.response && error.response.status === 401) {
+      //   token = refreshToken
+      //   console.log("token is now changed to refresh token")
+      //   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      //   console.log("refreshToken:" + token);
+      //   axios({
+      //     method: "post",
+      //     url: "http://localhost:4000/api/payment/create-checkout-session",
+      //     data: {
+      //       elementClicked,
+      //     },
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'Accept': 'application/json',
+      //       "Authorization": `Bearer ${token}`,
+      //     }
+      //   })
+      //   .then((response) => {
+      //     console.log("refresh token response: ", response);
+      //     console.log("Catalog Status: ", response.status);
+      //     if(error.response && error.response.status === 401) {
+      //       response.status(401).send("Unauthorized");
 
-          }
-        })
-        .catch((error, response) => {
-          console.log("refresh token response error: ", error)
-
-        })
-      } else {
-        console.log("Error in the frontend: ", error)
-      }
+      //     }
+      //   })
+      console.log("Token response error: ", error)
     });
   }
 
 
   const subscriptionCheckout = e => {
+    let csrfToken = getCsrfToken();
+    let sessionToken = getSessionToken()
 
     const elementClicked = e.currentTarget.id
 
@@ -105,7 +110,8 @@ export default function Catalog() {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Authorization": `Bearer ${token}`,
+        'X-CSRF-Token': csrfToken, // Include the CSRF token header
+        'X-Session-Token': sessionToken, // Include the session token header
       }
     })
     .then((response) => {

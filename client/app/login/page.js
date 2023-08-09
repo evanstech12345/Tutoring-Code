@@ -37,6 +37,7 @@ export default function Login() {
           'Accept': 'application/json',
 
         },
+        withCredentials: true, //sending cookies with request
       });
 
       console.log(response); // To debug what the response is.
@@ -45,18 +46,11 @@ export default function Login() {
         setShow(true);
       } else {
         // Maybe some additional error handling to gracefully handle missing `data`.
+        console.log("Set Show Failed to Show")
       }
       setShow(true);
 
-      if (response.data.accessToken && response.data.refreshToken) {
-        Cookies.set("accessToken", response.data.accessToken);
-        Cookies.set("refreshToken", response.data.refreshToken);
-        console.log(
-          "Access token: " + response.data.accessToken + " refreshToken: " + response.data.refreshToken
-        )
-      } else {
-        console.error("Token not found in response");
-      }
+      
     } catch (error) {
       console.log("Error getting data from login" + error);
     }
@@ -99,3 +93,30 @@ export default function Login() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// if (response.data.accessToken && response.data.refreshToken) {
+      //   console.log("First Refresh Token: " + response.data.refreshToken);
+        
+      //   Cookies.set("accessToken", response.data.accessToken, {
+      //     domain: "localhost",
+      //   });
+      //   Cookies.set("refreshToken", response.data.refreshToken, {
+      //     domain: "localhost",
+      //   });
+      //   console.log(
+      //     "Access token: " + response.data.accessToken + " refreshToken: " + response.data.refreshToken
+      //   )
+      // } else {
+      //   console.error("Token not found in response");
+      // }

@@ -32,30 +32,45 @@ router.post('/register', async (req, res) => {
       password: encryptedUserPassword
     });
 
-    //creating the jwt token
-    const accessToken = jwt.sign(
-      { user_id: user._id, email },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.ACCESS_TOKEN_LIFE
-      }
-    )
-     //creating refresh token
-     const refreshToken = jwt.sign(
-      { email },
-      process.env.REFRESH_SECRET,
-      {
-        expiresIn: process.env.REFRESH_TOKEN_LIFE,
-      }
-    );
+
+    //storing user data in session
+    const createSessionData = (user) => ({
+      _id: user._id,
+      email: user.email,
+    });
+    
+    const sessionData = createSessionData(user)
+
+    if(sessionData) {
+      console.log("Session created in the register")
+      req.session.user = sessionData;
+    } else {
+      console.log("Session not created in the register backend")
+    }
+    // //creating the jwt token
+    // const accessToken = jwt.sign(
+    //   { user_id: user._id, email },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: process.env.ACCESS_TOKEN_LIFE
+    //   }
+    // )
+    //  //creating refresh token
+    //  const refreshToken = jwt.sign(
+    //   { email },
+    //   process.env.REFRESH_SECRET,
+    //   {
+    //     expiresIn: process.env.REFRESH_TOKEN_LIFE,
+    //   }
+    // );
 
     //saveing user token 
-    user.token = accessToken, refreshToken;
+    // user.token = accessToken, refreshToken;
 
     //return new user
     res.status(201).json(user);
-    console.log("register access token: " + accessToken + "refresh token: " + refreshToken);
-
+    // console.log("register access token: " + accessToken + "refresh token: " + refreshToken);
+    console.log("register session info: ", createSessionData)
 
   } catch (error) {
     console.log(error);
