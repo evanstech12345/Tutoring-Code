@@ -25,15 +25,19 @@ export default function Catalog() {
 
     const elementClicked = e.currentTarget.id
     
-    let csrfToken = getCsrfToken();
-    let sessionToken = getSessionToken();
+    let csrfToken = Cookies.get('csrfToken');
+    console.log("C Token: " + csrfToken);
+
+    let sessionToken = Cookies.get('sessionToken');
+    console.log("S Token: " + sessionToken);
+
+    let sessionUser;
 
 
-    // let token = Cookies.get("accessToken");
-    // let refreshToken = Cookies.get("refreshToken");
+    if(!csrfToken && !sessionToken) {
+      console.log("both tokens are required")
+    }
 
-    // console.log("accessToken: ", token)
-    // console.log("refreshToken: ", refreshToken)
    
 
     axios({
@@ -65,31 +69,6 @@ export default function Catalog() {
       
     })
     .catch((error) => {
-      // if(error.response && error.response.status === 401) {
-      //   token = refreshToken
-      //   console.log("token is now changed to refresh token")
-      //   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      //   console.log("refreshToken:" + token);
-      //   axios({
-      //     method: "post",
-      //     url: "http://localhost:4000/api/payment/create-checkout-session",
-      //     data: {
-      //       elementClicked,
-      //     },
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Accept': 'application/json',
-      //       "Authorization": `Bearer ${token}`,
-      //     }
-      //   })
-      //   .then((response) => {
-      //     console.log("refresh token response: ", response);
-      //     console.log("Catalog Status: ", response.status);
-      //     if(error.response && error.response.status === 401) {
-      //       response.status(401).send("Unauthorized");
-
-      //     }
-      //   })
       console.log("Token response error: ", error)
     });
   }

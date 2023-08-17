@@ -60,7 +60,7 @@ app.use(session({
   saveUninitialized: false,
   store: store,
   cookie: {
-    maxAge: 2592000000, //you have to set the age directly
+    maxAge: 6 * 1000, //expires in 1 minute(milliseconds)
     secure: false, //!set to true during production
     httpOnly: true
   }

@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
     //storing user data in session
     const createSessionData = (user) => ({
       _id: user._id,
-      email: user.email,
+      email: email,
     });
     
     const sessionData = createSessionData(user)
@@ -47,26 +47,6 @@ router.post('/register', async (req, res) => {
     } else {
       console.log("Session not created in the register backend")
     }
-    // //creating the jwt token
-    // const accessToken = jwt.sign(
-    //   { user_id: user._id, email },
-    //   process.env.JWT_SECRET,
-    //   {
-    //     expiresIn: process.env.ACCESS_TOKEN_LIFE
-    //   }
-    // )
-    //  //creating refresh token
-    //  const refreshToken = jwt.sign(
-    //   { email },
-    //   process.env.REFRESH_SECRET,
-    //   {
-    //     expiresIn: process.env.REFRESH_TOKEN_LIFE,
-    //   }
-    // );
-
-    //saveing user token 
-    // user.token = accessToken, refreshToken;
-
     //return new user
     res.status(201).json(user);
     // console.log("register access token: " + accessToken + "refresh token: " + refreshToken);

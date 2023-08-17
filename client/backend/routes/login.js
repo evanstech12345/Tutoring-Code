@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 saltRounds = 10;
 require('dotenv').config()
 const middleware = require('./middleware')
+const crypto = require('crypto')
 
 
 router.use(cookieParser())
@@ -37,24 +38,42 @@ router.post('/login', async (req, res) => {
         return res.status(401).send("Invalid credentials");
       }
 
-      const createSessionData = (user) => ({
+      //Generating CRSF Tokens when the user Logs in
+      const csrfToken = crypto.randomUUID()//help protect against CSRF attacks
+      const sessionToken = crypto.randomUUID() //used to maintain a users session
+
+
+      const createSessionData = (user, csrfToken, sessionToken) => ({
         _id: user._id,
         email: user.email,
-      });
+        csrfToken, //adding csrf token to the object  
+        sessionToken,
+
+      })
+
       
-      const sessionData = createSessionData(user)
+      const sessionData = createSessionData(user, csrfToken, sessionToken);
 
       if(sessionData) {
         console.log("Session created in the Login")
-        req.session.user = sessionData;
+        req.session.user = sessionData;//saving the session
+        req.session.csrfToken = csrfToken;//If you ever want to save something to the session use req.session[variable]
+        req.session.sessionToken = sessionToken;
+        console.log(`saved csrf token ${csrfToken}, Authed by ${email}, saved session token ${sessionToken}`)
       } else {
         console.log("Session not created in the Login backend")
       }
-  
-      // // Create JWT token
+      
+      const responseToken = {
+        csrfToken: csrfToken,
+        sessionToken: sessionToken,
+        sessionData: sessionData,
+        message: `Authed by ${email}`
+      }
 
-      // Return user and token
-      // return res.json({ user, accessToken, refreshToken });
+
+      // Return token
+      return res.json(responseToken);//you have to return a json response object
     } catch (error) {
       console.log(error);
       return res.status(500).send("An error occurred");

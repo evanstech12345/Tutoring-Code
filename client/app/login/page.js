@@ -24,6 +24,9 @@ export default function Login() {
       //urls
       const loginUrl = "http://localhost:4000/api/user/login";
       // const customerUrl = "http://localhost:4000/api/stripe/customer";
+      let csrfToken;
+      let sessionToken;
+      let sessionUser;
 
       const response = await axios({
         method: "post",
@@ -40,6 +43,19 @@ export default function Login() {
         withCredentials: true, //sending cookies with request
       });
 
+      if(response.data.csrfToken && response.data.sessionToken && response.data.sessionData){
+        csrfToken = response.data.csrfToken;
+        sessionToken = response.data.sessionToken;
+        sessionUser = response.data.sessionData;
+        Cookies.set("csrfToken", csrfToken, { path: "/", sameSite: "strict" });
+        Cookies.set("sessionToken", sessionToken, { path: "/", sameSite: "strict" });
+
+        console.log(response.data)
+        console.log("Token from the Login Page: " + csrfToken)
+      } else {
+        console.error("no data in the login page")
+      }
+
       console.log(response); // To debug what the response is.
 
       if (response?.data) {
@@ -50,6 +66,7 @@ export default function Login() {
       }
       setShow(true);
 
+      
       
     } catch (error) {
       console.log("Error getting data from login" + error);
