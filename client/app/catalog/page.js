@@ -13,15 +13,18 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import axios from "axios"
 import Cookies from "js-cookie";
-import ReactDOM from 'react-dom'
+import Alert from "react-bootstrap/Alert";
+
 // import jwtDecode from 'jsonwebtoken';
 
 export default function Catalog() {
 
+  const [show, setShow] = useState(false);
 
 
   const checkout = async (e) => {
   //getting the product names from their elements
+
 
     const elementClicked = e.currentTarget.id
     
@@ -63,20 +66,31 @@ export default function Catalog() {
         window.open(sessionUrl);
         console.log("Window opened");
         
+        
       } else {
         console.log("Invalid response data:", data);
       }
       
     })
-    .catch((error) => {
+    .catch((error, response) => {
       console.log("Token response error: ", error)
+      if (response?.error) {
+        setShow(true);
+      } else {
+        // Maybe some additional error handling to gracefully handle missing `data`.
+        console.log("Set Show Failed to Show")
+      }
+      setShow(true);
     });
   }
 
 
   const subscriptionCheckout = e => {
-    let csrfToken = getCsrfToken();
-    let sessionToken = getSessionToken()
+    let csrfToken = Cookies.get('csrfToken');
+    console.log("C Token(subscription) : " + csrfToken);
+
+    let sessionToken = Cookies.get('sessionToken');
+    console.log("S Token(Subscription) : " + sessionToken);
 
     const elementClicked = e.currentTarget.id
 
@@ -113,6 +127,9 @@ export default function Catalog() {
 
   return (
     <div className={styles.main}>
+      <Alert show={show} variant="danger">
+        <h1>Please Login</h1>
+      </Alert>
       <Tabs>
         <TabList className={styles.tabList}>
           <Tab>One Time</Tab>
