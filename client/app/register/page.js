@@ -17,6 +17,8 @@ import Alert from 'react-bootstrap/Alert';
 
 export default function Register() {
   const [show, setShow] = useState(false);
+  const [showConflict, setShowConflict] = useState(false);
+
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const register = (e) => {
@@ -39,8 +41,27 @@ export default function Register() {
         password: registerPassword,
       }), // Convert the data to JSON format
     })
-      .then((res) => setShow(true))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log("setShow poped up")
+         setShow(true)
+        //  if(res.Conflict) {
+        //   console.log("user already exists")
+        //   setShowConflict(true)
+        //  } else {
+        //   console.log("ShowConflict didn't pop up")
+        //  }
+      })
+      .catch((err, res) => {
+        console.log("Register error: " + err)
+        if(err.Conflict) {
+          console.log("User already exists")
+          setShowConflict(true)
+        } else {
+          console.log("ShowConflict didn't pop up correctly")
+          setShowConflict(true)
+
+        }
+      });
   }
 
   return (
@@ -48,6 +69,12 @@ export default function Register() {
       <Alert show={show} variant="success">
         <h1>You are Signed in! Please Login</h1>
       </Alert>
+      {/*//!If there is a conflict*/}
+      <Alert show={showConflict} variant="danger">
+        <h1>User Already Exists</h1>
+      </Alert>
+
+
       <h1 className={style.registerTitle}>Register</h1>
       <Container className={style.registerContainer}>
         <Form onSubmit={register}>

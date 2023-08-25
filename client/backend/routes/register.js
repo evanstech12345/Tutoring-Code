@@ -49,6 +49,7 @@ router.post('/register', async (req, res) => {
     }
     //return new user
     res.status(201).json(user);
+    
     // console.log("register access token: " + accessToken + "refresh token: " + refreshToken);
     console.log("register session info: ", createSessionData)
 
