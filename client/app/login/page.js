@@ -14,6 +14,7 @@ import Cookies from 'js-cookie'
 
 export default function Login() {
   const [show, setShow] = useState(false);
+  const [showInvalid, setShowInvalid] = useState(false);
   const login = async (e) => {
     e.preventDefault();
 
@@ -60,6 +61,7 @@ export default function Login() {
 
       if (response?.data) {
         setShow(true);
+        setShowInvalid(false)
       } else {
         // Maybe some additional error handling to gracefully handle missing `data`.
         console.log("Set Show Failed to Show")
@@ -70,6 +72,13 @@ export default function Login() {
       
     } catch (error) {
       console.log("Error getting data from login" + error);
+      if(error.Unauthorized) {
+        setShowInvalid(true);
+      } else {
+        console.log("Popup malfunctioned, still going to popup")
+        setShowInvalid(true);
+        setShow(false);
+      }
     }
   };
 
@@ -77,6 +86,10 @@ export default function Login() {
     <div className={style.main}>
       <Alert show={show} variant="success">
         <h1>You are Logged In!</h1>
+      </Alert>
+
+      <Alert show={showInvalid} variant="danger">
+        <h1>Username and/or password incorrect</h1>
       </Alert>
       <h1 className={style.registerTitle}>Login</h1>
       <Container className={style.registerContainer}>

@@ -44,12 +44,8 @@ export default function Register() {
       .then((res) => {
         console.log("setShow poped up")
          setShow(true)
-        //  if(res.Conflict) {
-        //   console.log("user already exists")
-        //   setShowConflict(true)
-        //  } else {
-        //   console.log("ShowConflict didn't pop up")
-        //  }
+         setShowConflict(false)
+
       })
       .catch((err, res) => {
         console.log("Register error: " + err)
@@ -59,6 +55,7 @@ export default function Register() {
         } else {
           console.log("ShowConflict didn't pop up correctly")
           setShowConflict(true)
+          setShow(false)
 
         }
       });
