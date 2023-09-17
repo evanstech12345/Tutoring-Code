@@ -15,16 +15,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .card {
     height: 21em;
     width: 18em;
     background: rgb(216, 216, 216);
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
+    border-radius: 2em;
+
 
 
 }
@@ -50,13 +48,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #008CFF;
+    background: #0064B6;
 }
 
 .tabList {
     position: relative;
     padding: .5em;
-    color: #008CFF
+    color: #0064B6;
 }
 
 .Link {

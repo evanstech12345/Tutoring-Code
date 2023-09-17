@@ -24,12 +24,17 @@ export default function Layout({ children }) {
         activeKey="/home"
         className={styles.nav}
       >
-        <div className={styles.logodiv}>
-          <Link href="/">
-            <Image className={styles.logo} src="/Logo.png" alt="logo" />
-          </Link>
-        </div>
         <Nav.Item>
+          <Nav.Link
+            href="/"
+            eventKey="link-2"
+            className={styles.navtext}
+          >
+            Home
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          
           <Nav.Link href="/about" className={styles.navtext}>
             About
           </Nav.Link>
@@ -41,15 +46,6 @@ export default function Layout({ children }) {
             className={styles.navtext}
           >
             Catalog
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            href="/whycode"
-            eventKey="link-2"
-            className={styles.navtext}
-          >
-            Why Code?
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>

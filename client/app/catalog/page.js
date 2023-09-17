@@ -86,13 +86,19 @@ export default function Catalog() {
 
 
   const subscriptionCheckout = e => {
+
+
+
+
+    const elementClicked = e.currentTarget.id
+
+
     let csrfToken = Cookies.get('csrfToken');
     console.log("C Token(subscription) : " + csrfToken);
 
     let sessionToken = Cookies.get('sessionToken');
     console.log("S Token(Subscription) : " + sessionToken);
 
-    const elementClicked = e.currentTarget.id
 
     axios({
       method: "post",
@@ -119,8 +125,15 @@ export default function Catalog() {
         console.log("Invalid response data-subscription:", data);
       }
     })
-    .catch((error) => {
-      console.log("subscription-Error:", error);
+    .catch((error, response) => {
+      console.log("Token response error: ", error)
+      if (response?.error) {
+        setShow(true);
+      } else {
+        // Maybe some additional error handling to gracefully handle missing `data`.
+        console.log("Set Show Failed to Show")
+      }
+      setShow(true);
     });
   }
 
