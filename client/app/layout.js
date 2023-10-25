@@ -50,11 +50,11 @@ export default function Layout({ children }) {
         </Nav.Item>
         <Nav.Item>
           <Nav.Link
-            href="/dashboard"
+            href="/register"
             eventKey="link-2"
             className={styles.navtext}
           >
-            Dashboard
+            Register
           </Nav.Link>
         </Nav.Item>
       </Nav>

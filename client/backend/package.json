@@ -27,6 +27,7 @@
     "jwt-decode": "^3.1.2",
     "mongoclient": "^1.0.3",
     "mongoose": "^7.4.3",
+    "nodemailer": "^6.9.5",
     "stripe": "^12.8.0",
     "universal-cookie": "^4.0.4"
   },

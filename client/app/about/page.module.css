@@ -21,13 +21,15 @@
     margin-left: 2em;
     margin-top: 4em;
     float: left;
-    height: 300px;
-    width: 450px;
+    max-height: 20em;/*!You can shrink smaller than 20em but cant get bigger*/
+    max-width: 30em;
 }
 .h1kid1 {
     font-size: 2rem;
     padding: 5em;
 }
+
+
 
 .kid2{
     position: relative;

@@ -10,13 +10,16 @@ import Image from "react-bootstrap/Image";
 
 
 export default function Home() {
+  
+
+
   return (
     <div className={styles.main}>
       <Image className={styles.logo} src="/Logo.png" alt="logo" />
       <div className={styles.leftText}>
       <h1 className={styles.title_home}>Empowering Young Minds to <br />Code Their Future!</h1>
       <h2 className={styles.subheading_title}>Get ahead in tech with our amazing tutors.</h2>
-      <Button className={styles.getquotehomebtn} size="lg">Find a Course</Button>
+      <Link href="/catalog"><Button className={styles.getquotehomebtn} size="lg">Find a Course</Button></Link>
       </div>
     </div>
 
